@@ -54,8 +54,9 @@ public class ParkingDataBaseIT {
     public void testParkingACar(){
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         Ticket ticket = parkingService.processIncomingVehicle();
-        //TODO: check that a ticket is actually saved in DB and Parking table is updated with availability
-        assertEquals(ticket.getPrice(),ticketDAO.getTicket(ticket.getVehicleRegNumber()).getPrice());
+        //check that a ticket is actually saved in DB and Parking table is updated with availability
+        assertEquals(ticket.getParkingSpot().getId(),ticketDAO.getTicket(ticket.getVehicleRegNumber()).getParkingSpot().getId());
+        assertEquals(ticketDAO.getTicket(ticket.getVehicleRegNumber()).getParkingSpot().isAvailable(), false);
 }
 
     @Test
