@@ -8,8 +8,14 @@ import java.util.Date;
 public class FareCalculatorService {
 
     public void calculateFare(Ticket ticket){
+        String error;
         if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
-            throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
+            if(ticket.getOutTime()==null){
+                error = "null";
+            } else {
+                error = ticket.getOutTime().toString();
+            }
+            throw new IllegalArgumentException("Out time provided is incorrect: " + error);
         }
 
         long inHour = ticket.getInTime().getTime();
