@@ -30,7 +30,7 @@ public class ParkingDataBaseIT {
     private static InputReaderUtil inputReaderUtil;
 
     @BeforeAll
-    private static void setUp() throws Exception{
+    private static void setUp() throws Exception {
         parkingSpotDAO = new ParkingSpotDAO();
         parkingSpotDAO.dataBaseConfig = dataBaseTestConfig;
         ticketDAO = new TicketDAO();
@@ -46,25 +46,30 @@ public class ParkingDataBaseIT {
     }
 
     @AfterAll
-    private static void tearDown(){
+    private static void tearDown() {
 
     }
 
     @Test
-    public void testParkingACar(){
+    public void testParkingACar() {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         Ticket ticket = parkingService.processIncomingVehicle();
         //check that a ticket is actually saved in DB and Parking table is updated with availability
-        assertEquals(ticket.getParkingSpot().getId(),ticketDAO.getTicket(ticket.getVehicleRegNumber()).getParkingSpot().getId());
+        assertEquals(ticket.getParkingSpot().getId(), ticketDAO.getTicket(ticket.getVehicleRegNumber()).getParkingSpot().getId());
         assertEquals(ticketDAO.getTicket(ticket.getVehicleRegNumber()).getParkingSpot().isAvailable(), false);
-}
+    }
 
     @Test
-    public void testParkingLotExit(){
+    public void testParkingLotExit() {
         testParkingACar();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processExitingVehicle();
-        //TODO: check that the fare generated and out time are populated correctly in the database
+        //Check that the fare generated and out time are populated correctly in the database
+        Ticket ticket = parkingService.processExitingVehicle();
+        //Check that the fare generated and out time are populated correctly in the database
+        Ticket ticketDb = ticketDAO.getTicket(ticket.getVehicleRegNumber());
+        assertEquals(ticket.getPrice(), ticketDAO.getTicket(ticket.getVehicleRegNumber()).getPrice());
+        assertEquals(ticket.getOutTime().getTime(), ticketDAO.getTicket(ticket.getVehicleRegNumber()).getOutTime().getTime(), 5000);
     }
 
 }
