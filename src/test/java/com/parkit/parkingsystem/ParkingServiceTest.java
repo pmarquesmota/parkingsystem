@@ -113,13 +113,40 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableTest() {
+    public void getNextParkingNumberIfAvailableCarTest() {
         when(inputReaderUtil.readSelection()).thenReturn(1);
         when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(1);
 
         ParkingSpot parkingSpotIn = new ParkingSpot(1, ParkingType.CAR, true);
         ParkingSpot parkingSpotOut = parkingService.getNextParkingNumberIfAvailable();
         Assertions.assertEquals(parkingSpotIn, parkingSpotOut);
+    }
+
+    @Test
+    public void getNextParkingNumberIfAvailableBikeTest() {
+        when(inputReaderUtil.readSelection()).thenReturn(2);
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE)).thenReturn(1);
+
+        ParkingSpot parkingSpotIn = new ParkingSpot(1, ParkingType.CAR, true);
+        ParkingSpot parkingSpotOut = parkingService.getNextParkingNumberIfAvailable();
+        Assertions.assertEquals(parkingSpotIn, parkingSpotOut);
+    }
+
+    @Test
+    public void getNextParkingNumberIfAvailableExceptionTest() {
+        when(inputReaderUtil.readSelection()).thenReturn(2);
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE)).thenReturn(0);
+
+        ParkingSpot parkingSpotOut = parkingService.getNextParkingNumberIfAvailable();
+        assertNull(parkingSpotOut);
+    }
+
+    @Test
+    public void getNextParkingNumberIfAvailableOtherTest() {
+        when(inputReaderUtil.readSelection()).thenReturn(3);
+
+        ParkingSpot parkingSpotOut = parkingService.getNextParkingNumberIfAvailable();
+        assertNull(parkingSpotOut);
     }
 
 }
