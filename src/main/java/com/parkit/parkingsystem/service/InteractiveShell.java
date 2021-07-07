@@ -9,13 +9,13 @@ import org.apache.logging.log4j.Logger;
 public class InteractiveShell {
 
     private static final Logger logger = LogManager.getLogger("InteractiveShell");
+    private static InputReaderUtil inputReaderUtil = new InputReaderUtil();
 
     public static void loadInterface(){
         logger.info("App initialized!!!");
         System.out.println("Welcome to Parking System!");
 
         boolean continueApp = true;
-        InputReaderUtil inputReaderUtil = new InputReaderUtil();
         ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
         TicketDAO ticketDAO = new TicketDAO();
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
