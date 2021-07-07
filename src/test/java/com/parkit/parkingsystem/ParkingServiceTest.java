@@ -25,6 +25,7 @@ import org.mockito.quality.Strictness;
 import java.util.Date;
 
 import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 //import static com.shazam.*;
@@ -163,6 +164,17 @@ public class ParkingServiceTest {
         ticket.setParkingSpot(parkingSpot);
         ticket.setVehicleRegNumber("ABCDEF");
 
+        Ticket ticketToTest = parkingService.processIncomingVehicle();
+        // https://stackoverflow.com/questions/27605714/test-two-instances-of-object-are-equal-junit#comment69360336_27605802
+        // assertThat(ticketToTest, sameBeanAs(ticket));
+    }
+
+    @Test
+    public void processIncomingVehicleNullTest() throws Exception {
+        when(inputReaderUtil.readSelection()).thenReturn(1);
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR)).thenReturn(0);
+
+        Ticket ticket = new Ticket();
         Ticket ticketToTest = parkingService.processIncomingVehicle();
         // https://stackoverflow.com/questions/27605714/test-two-instances-of-object-are-equal-junit#comment69360336_27605802
         // assertThat(ticketToTest, sameBeanAs(ticket));
