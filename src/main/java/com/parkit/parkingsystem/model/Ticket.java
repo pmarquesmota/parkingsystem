@@ -58,4 +58,32 @@ public class Ticket {
     public void setOutTime(Date outTime) {
         this.outTime = outTime;
     }
+
+    public String toString(){
+        String parkingSpotString;
+        String inTimeString;
+        String outTimeString;
+
+        if(parkingSpot==null){
+            parkingSpotString = "null";
+        } else {
+            parkingSpotString = parkingSpot.toString();
+        }
+        if(inTime==null){
+            inTimeString = "null";
+        } else {
+            inTimeString = inTime.toString();
+        }
+        if(outTime==null){
+            outTimeString = "null";
+        } else {
+            outTimeString = outTime.toString();
+        }
+        return "id="+id+
+                " parkingSpot="+parkingSpotString+
+                " vehicleRegNumber="+vehicleRegNumber+
+                " price="+price+
+                " inTime="+inTimeString+
+                " outTime"+outTimeString;
+    }
 }

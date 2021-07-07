@@ -49,4 +49,10 @@ public class ParkingSpot {
     public int hashCode() {
         return number;
     }
+
+    public String toString(){
+        return "number="+number+
+                " parkingType="+parkingType.toString()+
+                " isAvailable="+isAvailable;
+    }
 }
