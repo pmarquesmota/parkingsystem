@@ -165,7 +165,6 @@ public class ParkingServiceTest {
         ticket.setVehicleRegNumber("ABCDEF");
 
         Ticket ticketToTest = parkingService.processIncomingVehicle();
-        // https://stackoverflow.com/questions/27605714/test-two-instances-of-object-are-equal-junit#comment69360336_27605802
         assertEquals(ticketToTest.toString(), ticket.toString());
     }
 
@@ -176,7 +175,18 @@ public class ParkingServiceTest {
 
         Ticket ticket = new Ticket();
         Ticket ticketToTest = parkingService.processIncomingVehicle();
-        // https://stackoverflow.com/questions/27605714/test-two-instances-of-object-are-equal-junit#comment69360336_27605802
+        assertEquals(ticketToTest.toString(), ticket.toString());
+    }
+
+    @Test
+    @Disabled
+    public void processIncomingVehicleExceptionTest() throws Exception {
+
+        Ticket ticket = new Ticket();
+        ParkingService parkingService = mock(ParkingService.class);
+        when(parkingService.getNextParkingNumberIfAvailable()).thenThrow(new Exception());
+
+        Ticket ticketToTest = parkingService.processIncomingVehicle();
         assertEquals(ticketToTest.toString(), ticket.toString());
     }
 
