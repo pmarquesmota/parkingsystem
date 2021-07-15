@@ -41,14 +41,16 @@ public class ParkingServiceTest {
     private static ParkingSpotDAO parkingSpotDAO;
     @Mock
     private static TicketDAO ticketDAO;
+    @Mock
+    private static FareCalculatorService fareCalculatorService;
 
     @BeforeAll
     public static void setup(){
         inputReaderUtil = new InputReaderUtil();
         parkingSpotDAO = new ParkingSpotDAO();
         ticketDAO = new TicketDAO();
-        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-
+        fareCalculatorService = new FareCalculatorService();
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO, fareCalculatorService);
     }
 
     @Test
@@ -66,7 +68,7 @@ public class ParkingServiceTest {
 
             when(parkingSpotDAO.updateParking(any(ParkingSpot.class))).thenReturn(true);
 
-            parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+            parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO, fareCalculatorService);
 
             parkingService.processExitingVehicle();
             verify(parkingSpotDAO, Mockito.times(1)).updateParking(any(ParkingSpot.class));
@@ -88,14 +90,13 @@ public class ParkingServiceTest {
             when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
             when(ticketDAO.updateTicket(any(Ticket.class))).thenReturn(false);
 
-            parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO, fareCalculatorService);
 
             Ticket result = parkingService.processExitingVehicle();
             assertNull(result);
     }
 
     @Test
-    @MockitoSettings(strictness = Strictness.LENIENT)
     public void processExitingVehicleExceptionTest() throws Exception {
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 
@@ -103,14 +104,14 @@ public class ParkingServiceTest {
 
         Ticket ticket = new Ticket();
         ticket.setInTime(new Date(System.currentTimeMillis() - (60 * 60 * 1000)));
+        ticket.setOutTime(null);
         ticket.setParkingSpot(parkingSpot);
         ticket.setVehicleRegNumber("ABCDEF");
         when(ticketDAO.getTicket(anyString())).thenReturn(ticket);
 
-        FareCalculatorService fareCalculatorService = mock(FareCalculatorService.class);
         doThrow(IllegalArgumentException.class).when(fareCalculatorService).calculateFare(ticket);
 
-        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+        parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO, fareCalculatorService);
         Ticket result = parkingService.processExitingVehicle();
         assertNull(result);
     }
@@ -179,13 +180,12 @@ public class ParkingServiceTest {
     }
 
     @Test
-    @Disabled
     public void processIncomingVehicleExceptionTest() throws Exception {
 
         Ticket ticket = new Ticket();
-        ParkingService parkingService = mock(ParkingService.class);
-        when(parkingService.getNextParkingNumberIfAvailable()).thenThrow(new Exception());
-
+        when(inputReaderUtil.readSelection()).thenReturn(2);
+        when(parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE)).thenReturn(4);
+        when(inputReaderUtil.readVehicleRegistrationNumber()).thenThrow(new Exception());
         Ticket ticketToTest = parkingService.processIncomingVehicle();
         assertEquals(ticketToTest.toString(), ticket.toString());
     }
