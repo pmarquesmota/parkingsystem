@@ -12,11 +12,18 @@ import java.sql.SQLException;
 
 public class DataBaseConfig {
 
-    /*
-    * Used by the Log4J system
+    /**
+    * Used by the Log4J system.
     */
     private static final Logger LOGGER = LogManager.getLogger("DataBaseConfig");
 
+    /**
+     * Open a SQL connection.
+     * @return a Connection instance.
+     * @throws ClassNotFoundException if the jdbc driver does not exist.
+     * @throws SQLException when a error occurs during the SQL driver
+     *                      initialization.
+     */
     public static Connection getConnection()
             throws ClassNotFoundException, SQLException {
         LOGGER.info("Create DB connection");
@@ -27,6 +34,10 @@ public class DataBaseConfig {
                 "toto55");
     }
 
+    /**
+     * Close the SQL connection.
+     * @param con a SQL database connection.
+     */
     public void closeConnection(final Connection con) {
         if (con != null) {
             try {
@@ -38,6 +49,10 @@ public class DataBaseConfig {
         }
     }
 
+    /**
+     * Close the prepared statement.
+     * @param ps a prepared statement SQL string.
+     */
     public void closePreparedStatement(final PreparedStatement ps) {
         if (ps != null) {
             try {
@@ -49,6 +64,10 @@ public class DataBaseConfig {
         }
     }
 
+    /**
+     * Close the SQL resource.
+     * @param rs a sql resource variable.
+     */
     public void closeResultSet(final ResultSet rs) {
         if (rs != null) {
             try {
