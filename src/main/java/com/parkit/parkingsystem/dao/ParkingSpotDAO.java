@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public final class ParkingSpotDAO {
+public  class ParkingSpotDAO {
     private static final Logger LOGGER = LogManager.getLogger("ParkingSpotDAO");
 
     public DataBaseConfig getDataBaseConfig() {

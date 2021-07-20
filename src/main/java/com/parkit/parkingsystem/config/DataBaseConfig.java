@@ -10,14 +10,14 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 
-public final class DataBaseConfig {
+public class DataBaseConfig {
 
     /*
     * Used by the Log4J system
     */
     private static final Logger LOGGER = LogManager.getLogger("DataBaseConfig");
 
-    public Connection getConnection()
+    public static Connection getConnection()
             throws ClassNotFoundException, SQLException {
         LOGGER.info("Create DB connection");
         Class.forName("com.mysql.cj.jdbc.Driver");
